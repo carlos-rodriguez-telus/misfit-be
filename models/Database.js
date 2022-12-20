@@ -31,9 +31,41 @@ const Account = sequelize.define(
   }
 );
 
+const Transaction = sequelize.define(
+  "Transactions",
+  {
+    transaction_id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    transaction_type: DataTypes.INTEGER,
+    amount: DataTypes.DECIMAL
+  },
+  {
+    tableName: "Transactions",
+  }
+);
+
+const Transfer = sequelize.define(
+  "Transfers",
+  {
+    transfer_id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    amount: DataTypes.DECIMAL,
+    currency: DataTypes.STRING
+  },
+  {
+    tableName: "Transfers",
+  }
+);
+
 User.hasMany(Account, {
   foreignKey: 'account_user_id'
 });
 
+Account.hasMany(Transaction, {
+  foreignKey: 'account_id'
+});
 
-module.exports = { sequelize, User, Account };
+Account.hasMany(Transfer, {
+  foreignKey: 'origin_account_id',
+  foreignKey: 'target_account_id'
+});
+
+module.exports = { sequelize, User, Account, Transaction, Transfer };

@@ -3,13 +3,14 @@ const bodyParser = require("body-parser");
 const db = require("./models/Database");
 const users = require("./controllers/User");
 const accounts = require("./controllers/Accounts");
+const transaction = require("./controllers/Transaction");
 
 const app = express();
 const port = 3000;
 
 app.use(bodyParser.json());
 
-/*  User Routes */
+/************************* Users *************************/
 
 app.post("/user", (req, res) => {
   users
@@ -18,7 +19,7 @@ app.post("/user", (req, res) => {
       res.send({ message: "User Created" });
     })
     .catch((error) => {
-      res.send({ error: JSON.stringify(error) });
+      res.send({ error: error });
     });
 });
 
@@ -29,7 +30,7 @@ app.put("/user", (req, res) => {
       res.send({ message: "User Updated" });
     })
     .catch((error) => {
-      res.send({ error: JSON.stringify(error) });
+      res.send({ error: error });
     });
 });
 
@@ -40,7 +41,7 @@ app.get("/user", (req, res) => {
       res.send({ message: result });
     })
     .catch((error) => {
-      res.send({ error: JSON.stringify(error) });
+      res.send({ error: error });
     });
 });
 
@@ -51,7 +52,7 @@ app.get("/user/:user_id", (req, res) => {
       res.send({ message: result });
     })
     .catch((error) => {
-      res.send({ error: JSON.stringify(error) });
+      res.send({ error: error });
     });
 });
 
@@ -62,11 +63,11 @@ app.delete("/user/:user_id", (req, res) => {
       res.send({ message: "User Deleted" });
     })
     .catch((error) => {
-      res.send({ error: JSON.stringify(error) });
+      res.send({ error: error });
     });
 });
 
-/* Account Routes */
+/************************* Accounts *************************/
 
 /* Create account */
 app.post("/account", (req, res) => {
@@ -76,7 +77,7 @@ app.post("/account", (req, res) => {
       res.send({ message: "Account Created" });
     })
     .catch((error) => {
-      res.send({ error: JSON.stringify(error) });
+      res.send({ error: error });
     });
 });
 
@@ -88,7 +89,7 @@ app.put("/account", (req, res) => {
       res.send({ message: "Account Updated" });
     })
     .catch((error) => {
-      res.send({ error: JSON.stringify(error) });
+      res.send({ error: error });
     });
 });
 
@@ -100,7 +101,7 @@ app.get("/account/:account_user_id", (req, res) => {
       res.send({ message: result });
     })
     .catch((error) => {
-      res.send({ error: JSON.stringify(error) });
+      res.send({ error: error });
     });
 });
 
@@ -112,9 +113,36 @@ app.delete("/account/:account_user_id/:account_number", (req, res) => {
       res.send({ message: "Account Deleted" });
     })
     .catch((error) => {
-      res.send({ error: JSON.stringify(error) });
+      res.send({ error: error });
     });
 });
+
+/************************* Accounts *************************/
+
+/** Create Transaction */
+app.post("/transaction", (req, res) => {
+  transaction
+    .createTransaction(db, req.body)
+    .then((result) => {
+      res.send({ message: "Transaction Stored!" });
+    })
+    .catch((error) => {
+      res.status(500).send({ error: error });
+    });
+});
+
+/** Get all account transactions */
+app.get("/transaction/:account_id", (req, res) => {
+  transaction
+    .getAll(db, req.params.account_id)
+    .then((result) => {
+      res.send({ message: result });
+    })
+    .catch((error) => {
+      res.status(500).send({ error: error });
+    });
+});
+
 
 /* Server Start */
 
