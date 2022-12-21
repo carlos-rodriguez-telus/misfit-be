@@ -4,6 +4,7 @@ const db = require("./models/Database");
 const users = require("./controllers/User");
 const accounts = require("./controllers/Accounts");
 const transaction = require("./controllers/Transaction");
+const transfer = require("./controllers/Transfer");
 
 const app = express();
 const port = 3000;
@@ -134,6 +135,32 @@ app.post("/transaction", (req, res) => {
 /** Get all account transactions */
 app.get("/transaction/:account_id", (req, res) => {
   transaction
+    .getAll(db, req.params.account_id)
+    .then((result) => {
+      res.send({ message: result });
+    })
+    .catch((error) => {
+      res.status(500).send({ error: error });
+    });
+});
+
+/************************* Transfers *************************/
+
+/** Create Transaction */
+app.post("/transfer", (req, res) => {
+  transfer
+    .createTransfer(db, req.body)
+    .then((result) => {
+      res.send({ message: "Money transfer done!" });
+    })
+    .catch((error) => {
+      res.status(500).send({ error: error });
+    });
+});
+
+/** Get all account transactions */
+app.get("/transfer/:account_id", (req, res) => {
+  transfer
     .getAll(db, req.params.account_id)
     .then((result) => {
       res.send({ message: result });

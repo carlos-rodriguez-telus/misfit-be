@@ -63,9 +63,7 @@ Account.hasMany(Transaction, {
   foreignKey: 'account_id'
 });
 
-Account.hasMany(Transfer, {
-  foreignKey: 'origin_account_id',
-  foreignKey: 'target_account_id'
-});
+Account.hasMany(Transfer, { foreignKey: 'origin_account_id'});
+Account.hasMany(Transfer, { foreignKey: 'target_account_id'});
 
 module.exports = { sequelize, User, Account, Transaction, Transfer };
