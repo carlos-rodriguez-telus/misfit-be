@@ -11,6 +11,20 @@ const port = 3000;
 
 app.use(bodyParser.json());
 
+/************************* Login *************************/
+app.post("/login", (req, res) => {
+  users
+    .getSingle(db, req.body)
+    .then((result) => {
+      if (result.length > 0) {
+        res.status(200).send({ message: "Valid User" });
+      } else {
+        res.status(403).send({ message: "Invalid User" });
+      }
+    })
+    .catch((error) => {});
+});
+
 /************************* Users *************************/
 
 app.post("/user", (req, res) => {
@@ -144,6 +158,24 @@ app.get("/transaction/:account_id", (req, res) => {
     });
 });
 
+/************************* Filter *************************/
+app.get("/filter/:account_id/:transaction_type/:date", (req, res) => {
+  let data = {
+    account_id: req.params.account_id,
+    transaction_type: req.params.transaction_type,
+    date: req.params.date,
+  };
+
+  transaction
+    .getTransactions(db, data)
+    .then((result) => {
+      res.send({ message: result });
+    })
+    .catch((error) => {
+      res.status(500).send({ error: error });
+    });
+});
+
 /************************* Transfers *************************/
 
 /** Create Transaction */
@@ -170,7 +202,6 @@ app.get("/transfer/:account_id", (req, res) => {
     });
 });
 
-
 /* Server Start */
 
 app.listen(port, () => {
@@ -180,6 +211,6 @@ app.listen(port, () => {
       console.log("Database initiated!");
     })
     .then((result) => {
-      console.log(`Example app listening on port ${port}`);
+      console.log(`Server listening on port ${port}`);
     });
 });

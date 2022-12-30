@@ -36,6 +36,7 @@ const Transaction = sequelize.define(
   {
     transaction_id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     transaction_type: DataTypes.INTEGER,
+    date: DataTypes.DATEONLY,
     amount: DataTypes.DECIMAL
   },
   {
