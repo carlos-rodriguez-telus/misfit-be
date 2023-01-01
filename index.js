@@ -1,5 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const cors = require("cors");
 const db = require("./models/Database");
 const users = require("./controllers/User");
 const accounts = require("./controllers/Accounts");
@@ -10,6 +11,7 @@ const app = express();
 const port = 3000;
 
 app.use(bodyParser.json());
+app.use(cors());
 
 /************************* Login *************************/
 app.post("/login", (req, res) => {
@@ -17,9 +19,9 @@ app.post("/login", (req, res) => {
     .getSingle(db, req.body)
     .then((result) => {
       if (result.length > 0) {
-        res.status(200).send({ message: "Valid User" });
+        res.status(200).send({ message: "VALID" });
       } else {
-        res.status(403).send({ message: "Invalid User" });
+        res.status(403).send({ message: "INVALID" });
       }
     })
     .catch((error) => {});
@@ -29,12 +31,12 @@ app.post("/login", (req, res) => {
 
 app.post("/user", (req, res) => {
   users
-    .createUser(db, req.body)
+    .createUser(db, req.body.values)
     .then((result) => {
-      res.send({ message: "User Created" });
+      res.send({ message: "User Created", status:"OK"});
     })
     .catch((error) => {
-      res.send({ error: error });
+      res.send({ error: error, status:"ERROR" });
     });
 });
 

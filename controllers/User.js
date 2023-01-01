@@ -26,13 +26,13 @@ const updateUser = (db, data) => {
 
 const getAll = (db) => {
   return db.User.findAll({
-    attributes: ["email", "name", "lastname", "address", "phone"],
+    attributes: ["user_id", "email", "name", "lastname", "address", "phone"],
   });
 };
 
 const getSingle = (db, data) => {
   return db.User.findOne({
-    attributes: ["email", "name", "lastname", "address", "phone"],
+    attributes: ["user_id", "email", "name", "lastname", "address", "phone"],
     where: { user_id: data },
   });
 };
@@ -43,7 +43,7 @@ const deleteUser = (db, data) => {
 
 const getUser = (db, data) => {
   return db.User.findOne({
-    attributes: ["email"],
+    attributes: ["user_id", "email"],
     where: { email: data.email, password: data.password },
   });
 };
