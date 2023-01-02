@@ -89,12 +89,12 @@ app.delete("/user/:user_id", (req, res) => {
 /* Create account */
 app.post("/account", (req, res) => {
   accounts
-    .createAccount(db, req.body)
+    .createAccount(db, req.body.values)
     .then((result) => {
-      res.send({ message: "Account Created" });
+      res.send({ message: "Account Created", status:"OK"});
     })
     .catch((error) => {
-      res.send({ error: error });
+      res.send({ error: error, status:"OK"});
     });
 });
 
