@@ -94,19 +94,19 @@ app.post("/account", (req, res) => {
       res.send({ message: "Account Created", status:"OK"});
     })
     .catch((error) => {
-      res.send({ error: error, status:"OK"});
+      res.send({ error: error, status:"ERROR"});
     });
 });
 
 /**Update Account */
 app.put("/account", (req, res) => {
   accounts
-    .updateAccount(db, req.body)
+    .updateAccount(db, req.body.values)
     .then((result) => {
-      res.send({ message: "Account Updated" });
+      res.send({ message: "Account Updated", status:"OK" });
     })
     .catch((error) => {
-      res.send({ error: error });
+      res.send({ error: error, status:"ERROR" });
     });
 });
 
@@ -127,10 +127,10 @@ app.delete("/account/:account_user_id/:account_number", (req, res) => {
   accounts
     .deleteAccount(db, req.params.account_user_id, req.params.account_number)
     .then((result) => {
-      res.send({ message: "Account Deleted" });
+      res.send({ message: "Account Deleted", status:"OK"});
     })
     .catch((error) => {
-      res.send({ error: error });
+      res.send({ error: error, status:"ERROR" });
     });
 });
 
