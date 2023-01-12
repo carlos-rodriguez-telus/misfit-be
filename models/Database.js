@@ -6,7 +6,7 @@ const User = sequelize.define(
   "Users",
   {
     user_id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-    email: DataTypes.STRING,
+    email: {type: DataTypes.STRING, unique: true, allowNull: false},
     name: DataTypes.STRING,
     lastname: DataTypes.STRING,
     address: DataTypes.STRING,
@@ -35,7 +35,9 @@ const Transaction = sequelize.define(
   "Transactions",
   {
     transaction_id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    transaction_user_id: DataTypes.INTEGER,
     transaction_type: DataTypes.INTEGER,
+    category: DataTypes.INTEGER,
     date: DataTypes.DATEONLY,
     amount: DataTypes.DECIMAL
   },
@@ -63,6 +65,8 @@ User.hasMany(Account, {
 Account.hasMany(Transaction, {
   foreignKey: 'account_id'
 });
+
+Transaction.belongsTo(Account, {foreignKey: 'account_id'});
 
 Account.hasMany(Transfer, { foreignKey: 'origin_account_id'});
 Account.hasMany(Transfer, { foreignKey: 'target_account_id'});

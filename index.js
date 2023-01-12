@@ -111,9 +111,9 @@ app.put("/account", (req, res) => {
 });
 
 /**Get all User Accounts */
-app.get("/account/:account_user_id", (req, res) => {
+app.get("/account/:transaction_user_id", (req, res) => {
   accounts
-    .getAll(db, req.params.account_user_id)
+    .getAll(db, req.params.transaction_user_id)
     .then((result) => {
       res.send({ message: result });
     })
@@ -139,42 +139,47 @@ app.delete("/account/:account_user_id/:account_number", (req, res) => {
 /** Create Transaction */
 app.post("/transaction", (req, res) => {
   transaction
-    .createTransaction(db, req.body)
+    .createTransaction(db, req.body.data)
     .then((result) => {
-      res.send({ message: "Transaction Stored!" });
+      res.send({ message: "Transaction Stored!", status:"OK" });
     })
     .catch((error) => {
-      res.status(500).send({ error: error });
+      console.log(error);
+      res.status(500).send({ error: error, status:"ERROR" });
     });
 });
 
 /** Get all account transactions */
-app.get("/transaction/:account_id", (req, res) => {
+app.get("/transaction/:transaction_user_id", (req, res) => {
   transaction
-    .getAll(db, req.params.account_id)
+    .getAll(db, req.params.transaction_user_id)
     .then((result) => {
-      res.send({ message: result });
+      res.send({ message: result, status:"OK" });
     })
     .catch((error) => {
-      res.status(500).send({ error: error });
+      console.log(error);
+      res.status(500).send({ error: error, status:"ERROR" });
     });
 });
 
 /************************* Filter *************************/
-app.get("/filter/:account_id/:transaction_type/:date", (req, res) => {
-  let data = {
-    account_id: req.params.account_id,
-    transaction_type: req.params.transaction_type,
-    date: req.params.date,
-  };
+app.get("/filter/:transaction_user_id/:filter_category/:filter_value", (req, res) => {
+
+let query = {}
+query["transaction_user_id"] = req.params.transaction_user_id
+if(req.params.filter_category=="date") query["date"] = req.params.filter_value;
+if(req.params.filter_category=="category") query["category"] = req.params.filter_value;
+if(req.params.filter_category=="account_id") query["account_id"] = req.params.filter_value;
+
+console.log(query);
 
   transaction
-    .getTransactions(db, data)
+    .getTransactions(db, query)
     .then((result) => {
-      res.send({ message: result });
+      res.send({ message: result, status:"OK" });
     })
     .catch((error) => {
-      res.status(500).send({ error: error });
+      res.status(500).send({ error: error, status:"ERROR" });
     });
 });
 
