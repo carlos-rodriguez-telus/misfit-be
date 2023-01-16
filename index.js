@@ -16,15 +16,18 @@ app.use(cors());
 /************************* Login *************************/
 app.post("/login", (req, res) => {
   users
-    .getSingle(db, req.body)
+    .getUser(db, req.body)
     .then((result) => {
-      if (result.length > 0) {
+      console.log(result);
+      if (result) {
         res.status(200).send({ message: "VALID" });
       } else {
-        res.status(403).send({ message: "INVALID" });
+        res.status(200).send({ message: "INVALID" });
       }
     })
-    .catch((error) => {});
+    .catch((error) => {
+      res.status(500).send({ message: "INVALID" });
+    });
 });
 
 /************************* Users *************************/
@@ -141,10 +144,14 @@ app.post("/transaction", (req, res) => {
   transaction
     .createTransaction(db, req.body.data)
     .then((result) => {
-      res.send({ message: "Transaction Stored!", status:"OK" });
+      accounts.updateBalance(db, req.body.data).then(()=>{
+        res.send({ message: "Transaction Stored!", status:"OK" });
+      }).catch((error)=>{
+        console.log(error)
+        res.status(500).send({ error: error, status:"ERROR" });
+      });
     })
     .catch((error) => {
-      console.log(error);
       res.status(500).send({ error: error, status:"ERROR" });
     });
 });
@@ -167,13 +174,12 @@ app.get("/filter/:transaction_user_id/:filter_category/:filter_value", (req, res
 
 let query = {}
 query["transaction_user_id"] = req.params.transaction_user_id
+
 if(req.params.filter_category=="date") query["date"] = req.params.filter_value;
 if(req.params.filter_category=="category") query["category"] = req.params.filter_value;
-if(req.params.filter_category=="account_id") query["account_id"] = req.params.filter_value;
+if(req.params.filter_category=="account") query["account_id"] = req.params.filter_value;
 
-console.log(query);
-
-  transaction
+transaction
     .getTransactions(db, query)
     .then((result) => {
       res.send({ message: result, status:"OK" });

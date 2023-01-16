@@ -43,7 +43,7 @@ const deleteUser = (db, data) => {
 
 const getUser = (db, data) => {
   return db.User.findOne({
-    attributes: ["user_id", "email"],
+    attributes: ["user_id"],
     where: { email: data.email, password: data.password },
   });
 };
