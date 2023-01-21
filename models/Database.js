@@ -23,7 +23,7 @@ const Account = sequelize.define(
   {
     account_id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     bank_name: DataTypes.STRING,
-    account_number: DataTypes.INTEGER,
+    account_number: {type: DataTypes.INTEGER, unique: true},
     balance: DataTypes.DECIMAL,
   },
   {

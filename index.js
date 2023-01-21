@@ -18,15 +18,14 @@ app.post("/login", (req, res) => {
   users
     .getUser(db, req.body)
     .then((result) => {
-      console.log(result);
       if (result) {
-        res.status(200).send({ message: "VALID" });
+        res.status(200).send({ message: "VALID", userData:result });
       } else {
-        res.status(200).send({ message: "INVALID" });
+        res.status(200).send({ message: "INVALID LOGIN" });
       }
     })
     .catch((error) => {
-      res.status(500).send({ message: "INVALID" });
+      res.status(500).send({ message: "INVALID LOGIN" });
     });
 });
 
@@ -39,7 +38,7 @@ app.post("/user", (req, res) => {
       res.send({ message: "User Created", status:"OK"});
     })
     .catch((error) => {
-      res.send({ error: error, status:"ERROR" });
+      res.send({ error: "User can not be created, already have an account?", status:"ERROR" });
     });
 });
 
@@ -61,7 +60,7 @@ app.get("/user", (req, res) => {
       res.send({ message: result });
     })
     .catch((error) => {
-      res.send({ error: error });
+      res.send({ error: "User not available" });
     });
 });
 
@@ -72,7 +71,7 @@ app.get("/user/:user_id", (req, res) => {
       res.send({ message: result });
     })
     .catch((error) => {
-      res.send({ error: error });
+      res.send({ error: "User information not available" });
     });
 });
 
@@ -83,7 +82,7 @@ app.delete("/user/:user_id", (req, res) => {
       res.send({ message: "User Deleted" });
     })
     .catch((error) => {
-      res.send({ error: error });
+      res.send({ error: "User can not be deleted" });
     });
 });
 
@@ -97,7 +96,7 @@ app.post("/account", (req, res) => {
       res.send({ message: "Account Created", status:"OK"});
     })
     .catch((error) => {
-      res.send({ error: error, status:"ERROR"});
+      res.send({ error: "Please check account information", status:"ERROR"});
     });
 });
 
@@ -109,7 +108,7 @@ app.put("/account", (req, res) => {
       res.send({ message: "Account Updated", status:"OK" });
     })
     .catch((error) => {
-      res.send({ error: error, status:"ERROR" });
+      res.send({ error: "Account can not be updated", status:"ERROR" });
     });
 });
 
@@ -133,7 +132,7 @@ app.delete("/account/:account_user_id/:account_number", (req, res) => {
       res.send({ message: "Account Deleted", status:"OK"});
     })
     .catch((error) => {
-      res.send({ error: error, status:"ERROR" });
+      res.send({ error: "Account can not be deleted", status:"ERROR" });
     });
 });
 
