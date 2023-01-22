@@ -214,6 +214,30 @@ app.get("/transfer/:account_id", (req, res) => {
     });
 });
 
+/************************* Dashboard *************************/
+
+app.get("/dashboard/data/:user_id/:transaction_type", (req, res)=>{
+  transaction
+    .getIncomeOutcome(db, req.params.user_id, req.params.transaction_type)
+    .then((response)=>{
+      res.send({message:response});
+    })
+    .catch((error)=>{
+      res.status(200).send({error:"No Information available"});
+    });
+});
+
+app.get("/dashboard/graph/:user_id", (req, res)=>{
+  transaction
+    .getResume(db, req.params.user_id)
+    .then((response)=>{
+      res.send({message:response});
+    })
+    .catch((error)=>{
+      res.status(200).send({error:"No Information available"});
+    });
+});
+
 /* Server Start */
 
 app.listen(port, () => {
