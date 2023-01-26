@@ -140,17 +140,19 @@ app.delete("/account/:account_user_id/:account_number", (req, res) => {
 
 /** Create Transaction */
 app.post("/transaction", (req, res) => {
+  console.log(req.body);
   transaction
     .createTransaction(db, req.body.data)
     .then((result) => {
       accounts.updateBalance(db, req.body.data).then(()=>{
         res.send({ message: "Transaction Stored!", status:"OK" });
       }).catch((error)=>{
-        console.log(error)
+        console.log(error);
         res.status(500).send({ error: error, status:"ERROR" });
       });
     })
     .catch((error) => {
+      console.log(error);
       res.status(500).send({ error: error, status:"ERROR" });
     });
 });
@@ -190,7 +192,7 @@ transaction
 
 /************************* Transfers *************************/
 
-/** Create Transaction */
+/** Create Transfer */
 app.post("/transfer", (req, res) => {
   transfer
     .createTransfer(db, req.body)

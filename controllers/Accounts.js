@@ -4,6 +4,7 @@ const createAccount = (db, data) => {
     account_user_id: data.account_user_id,
     bank_name: data.bank_name,
     balance: data.balance,
+    currency: data.currency,
   });
 };
 

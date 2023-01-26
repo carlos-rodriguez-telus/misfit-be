@@ -1,5 +1,4 @@
 const { sequelize } = require("../models/Database");
-const { Op } = (Sequelize = require("sequelize"));
 
 const createTransaction = (db, data) => {
   return db.Transaction.create({
@@ -9,6 +8,7 @@ const createTransaction = (db, data) => {
     category: data.category,
     amount: data.amount,
     date: data.date,
+    currency: data.currency,
   });
 };
 
@@ -52,7 +52,7 @@ const getIncomeOutcome = (db, userID, tType) => {
 const getResume = (db, userID) =>{
   return db.Transaction.findAll({
     attributes:["category", [sequelize.fn("sum", sequelize.col("`Transactions`.`amount`")), "total"]],
-    where:{transaction_user_id: userID, transaction_type:1},
+    where:{transaction_user_id: userID, transaction_type:1 },
     group:["`Transactions`.`category`"],
     order: sequelize.literal("`Transactions`.`category` ASC")
   });  

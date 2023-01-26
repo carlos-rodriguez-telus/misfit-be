@@ -25,6 +25,7 @@ const Account = sequelize.define(
     bank_name: DataTypes.STRING,
     account_number: {type: DataTypes.INTEGER, unique: true},
     balance: DataTypes.DECIMAL,
+    currency: DataTypes.STRING
   },
   {
     tableName: "Accounts",
